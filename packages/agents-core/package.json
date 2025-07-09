@@ -54,9 +54,17 @@
         "require": "./dist/shims/shims-node.js",
         "import": "./dist/shims/shims-node.mjs"
       },
-      "types": "./dist/shims/shims.d.ts",
-      "require": "./dist/shims/shims.js",
-      "import": "./dist/shims/shims.mjs"
+      "react-native": {
+        "require": "./dist/shims/shims-react-native.js",
+        "types": "./dist/shims/shims-react-native.d.ts",
+        "default": "./dist/shims/shims-react-native.mjs"
+      },
+      "require": {
+        "types": "./dist/shims/shims-node.d.ts",
+        "default": "./dist/shims/shims-node.js"
+      },
+      "types": "./dist/shims/shims-node.d.ts",
+      "default": "./dist/shims/shims-node.mjs"
     }
   },
   "keywords": [
@@ -70,8 +78,13 @@
     "@modelcontextprotocol/sdk": "^1.17.2"
   },
   "dependencies": {
+    "@openai/zod": "npm:zod@^3.25.40",
+    "@ungap/structured-clone": "^1.3.0",
     "debug": "^4.4.0",
-    "openai": "^6"
+    "event-target-shim": "^6.0.2",
+    "events": "^3.3.0",
+    "openai": "^6",
+    "react-native-uuid": "^2.0.3"
   },
   "peerDependencies": {
     "zod": "^3.25.40 || ^4.0"
@@ -102,6 +115,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
+    "@types/ungap__structured-clone": "^1.2.0",
     "zod": "^3.25.40 || ^4.0"
   },
   "files": [
