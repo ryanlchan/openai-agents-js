@@ -5,10 +5,7 @@ import {
   MediaStream,
   MediaStreamTrack,
   mediaDevices,
-  registerGlobals,
 } from 'react-native-webrtc';
-
-registerGlobals();
 
 export const WebSocket = global.WebSocket;
 export const isBrowserEnvironment = (): boolean => false;
@@ -21,4 +18,10 @@ export {
   MediaStream,
   MediaStreamTrack,
   mediaDevices,
+};
+export const createAudioElement = (): HTMLAudioElement => {
+  return {
+    autoplay: true,
+    srcObject: null,
+  } as unknown as HTMLAudioElement;
 };

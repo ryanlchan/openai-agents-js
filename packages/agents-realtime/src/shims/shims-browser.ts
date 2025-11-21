@@ -12,3 +12,6 @@ export const RTCSessionDescription = globalThis.RTCSessionDescription;
 export const MediaStream = globalThis.MediaStream;
 export const MediaStreamTrack = globalThis.MediaStreamTrack;
 export const mediaDevices = navigator.mediaDevices;
+export const createAudioElement = (): HTMLAudioElement => {
+  return document.createElement('audio');
+};

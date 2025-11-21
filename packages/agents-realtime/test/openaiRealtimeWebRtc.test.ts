@@ -15,52 +15,52 @@ const { FakeRTCDataChannel, FakeRTCPeerConnection, lastChannelRef } =
       }
     }
 
-class FakeRTCPeerConnection {
-  ontrack: ((ev: any) => void) | null = null;
-  onconnectionstatechange: (() => void) | null = null;
-  connectionState = 'new';
+    class FakeRTCPeerConnection {
+      ontrack: ((ev: any) => void) | null = null;
+      onconnectionstatechange: (() => void) | null = null;
+      connectionState = 'new';
 
-  createDataChannel(_name: string) {
-    lastChannel = new FakeRTCDataChannel();
-    // simulate async open event
-    setTimeout(() => {
-      this._simulateStateChange('connected');
-      lastChannel?.dispatchEvent(new Event('open'));
-    }, 0);
-    return lastChannel as unknown as RTCDataChannel;
-  }
-  addTrack() {}
-  async createOffer() {
-    this._simulateStateChange('connecting');
-    return { sdp: 'offer', type: 'offer' };
-  }
-  async setLocalDescription(_desc: any) {}
-  async setRemoteDescription(_desc: any) {}
-  close() {
-    this._simulateStateChange('closed');
-  }
-  getSenders() {
-    return [] as any;
-  }
-
-  _simulateStateChange(
-    state:
-      | 'new'
-      | 'connecting'
-      | 'connected'
-      | 'disconnected'
-      | 'failed'
-      | 'closed',
-  ) {
-    if (this.connectionState === state) return;
-    this.connectionState = state;
-    setTimeout(() => {
-      if (this.onconnectionstatechange) {
-        this.onconnectionstatechange();
+      createDataChannel(_name: string) {
+        lastChannel = new FakeRTCDataChannel();
+        // simulate async open event
+        setTimeout(() => {
+          this._simulateStateChange('connected');
+          lastChannel?.dispatchEvent(new Event('open'));
+        }, 0);
+        return lastChannel as unknown as RTCDataChannel;
       }
-    }, 0);
-  }
-}
+      addTrack() {}
+      async createOffer() {
+        this._simulateStateChange('connecting');
+        return { sdp: 'offer', type: 'offer' };
+      }
+      async setLocalDescription(_desc: any) {}
+      async setRemoteDescription(_desc: any) {}
+      close() {
+        this._simulateStateChange('closed');
+      }
+      getSenders() {
+        return [] as any;
+      }
+
+      _simulateStateChange(
+        state:
+          | 'new'
+          | 'connecting'
+          | 'connected'
+          | 'disconnected'
+          | 'failed'
+          | 'closed',
+      ) {
+        if (this.connectionState === state) return;
+        this.connectionState = state;
+        setTimeout(() => {
+          if (this.onconnectionstatechange) {
+            this.onconnectionstatechange();
+          }
+        }, 0);
+      }
+    }
 
     return {
       FakeRTCDataChannel,
@@ -288,7 +288,7 @@ describe('OpenAIRealtimeWebRTC.connectionState', () => {
       configurable: true,
       writable: true,
     });
-    lastChannel = null;
+    lastChannelRef.set(null);
   });
 
   it('fires connection_change and disconnects on peer connection failure', async () => {
@@ -298,8 +298,7 @@ describe('OpenAIRealtimeWebRTC.connectionState', () => {
     await rtc.connect({ apiKey: 'ek_test' });
     expect(rtc.status).toBe('connected');
     expect(events).toEqual(['connecting', 'connected']);
-    const pc = rtc.connectionState
-      .peerConnection as unknown as FakeRTCPeerConnection;
+    const pc = rtc.connectionState.peerConnection as any;
     expect(pc).toBeInstanceOf(FakeRTCPeerConnection);
     pc._simulateStateChange('failed');
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -395,7 +394,7 @@ describe('OpenAIRealtimeWebRTC.callId', () => {
       configurable: true,
       writable: true,
     });
-    lastChannel = null;
+    lastChannelRef.set(null);
   });
 
   it('returns the callId', async () => {

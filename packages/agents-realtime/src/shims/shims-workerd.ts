@@ -15,3 +15,6 @@ export const MediaStream =
 export const MediaStreamTrack =
   undefined as unknown as typeof globalThis.MediaStreamTrack;
 export const mediaDevices = undefined as unknown as MediaDevices;
+export const createAudioElement = (): HTMLAudioElement => {
+  return undefined as unknown as HTMLAudioElement;
+};

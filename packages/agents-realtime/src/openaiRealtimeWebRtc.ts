@@ -4,6 +4,7 @@ import {
   isBrowserEnvironment,
   mediaDevices as shimMediaDevices,
   RTCPeerConnection as RTCPeerConnectionCtor,
+  createAudioElement,
 } from '@openai/agents-realtime/_shims';
 import {
   RealtimeTransportLayer,
@@ -260,7 +261,7 @@ export class OpenAIRealtimeWebRTC
         // set up audio playback
         if (isBrowserEnvironment()) {
           const audioElement =
-            this.options.audioElement ?? document.createElement('audio');
+            this.options.audioElement ?? createAudioElement();
           audioElement.autoplay = true;
           peerConnection.ontrack = (event) => {
             audioElement.srcObject = event.streams[0];
