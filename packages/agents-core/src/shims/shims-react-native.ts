@@ -2,7 +2,7 @@
 export { EventEmitter, EventEmitterEvents } from './interface';
 import type { EventEmitterEvents, Timeout, Timer } from './interface';
 
-import { EventEmitter as NodeEventEmitter } from 'events';
+import EventEmitter3 from 'eventemitter3';
 import structuredClone from '@ungap/structured-clone';
 import uuid from 'react-native-uuid';
 
@@ -18,36 +18,7 @@ export function loadEnv(): Record<string, string | undefined> {
 
 export class ReactNativeEventEmitter<
   Events extends EventEmitterEvents = Record<string, any[]>,
-> extends NodeEventEmitter {
-  override on<K extends keyof Events & (string | symbol)>(
-    type: K,
-    listener: (...args: Events[K]) => void,
-  ): this {
-    // Node's typings accept string | symbol; cast is safe.
-    return super.on(type as string | symbol, listener);
-  }
-
-  override off<K extends keyof Events & (string | symbol)>(
-    type: K,
-    listener: (...args: Events[K]) => void,
-  ): this {
-    return super.off(type as string | symbol, listener);
-  }
-
-  override emit<K extends keyof Events & (string | symbol)>(
-    type: K,
-    ...args: Events[K]
-  ): boolean {
-    return super.emit(type as string | symbol, ...args);
-  }
-
-  override once<K extends keyof Events & (string | symbol)>(
-    type: K,
-    listener: (...args: Events[K]) => void,
-  ): this {
-    return super.once(type as string | symbol, listener);
-  }
-}
+> extends EventEmitter3<Events> {}
 
 export { ReactNativeEventEmitter as RuntimeEventEmitter };
 
